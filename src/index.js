@@ -17,6 +17,7 @@ export type LazilyRenderProps = {
   content?: React.Node;
   children?: (render: boolean) => React.Node;
   onRender?: () => void;
+  eventToUpdate?: string;
 };
 
 export type LazilyRenderState = {
@@ -59,12 +60,20 @@ export default class LazilyRender extends React.Component<LazilyRenderProps, Laz
     const container = this.container;
     if (container) container.addEventListener('scroll', this.update, eventListenerOptions);
     window.addEventListener('resize', this.update);
+    const {eventToUpdate} = this.props;
+    if (eventToUpdate) {
+        window.addEventListener(eventToUpdate, this.update);
+    }
   }
 
   stopListening() {
     const container = this.container;
     if (container) container.removeEventListener('scroll', this.update, eventListenerOptions);
     window.removeEventListener('resize', this.update);
+    const {eventToUpdate} = this.props;
+    if (eventToUpdate) {
+        window.removeEventListener(eventToUpdate, this.update);
+    }
   }
 
   update = () => {
