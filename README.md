@@ -54,7 +54,7 @@ The `className` applied to the wrapping element.
 
 The wrapping component.
 
-e.g. 
+e.g.
 ```js
 <LazilyRender component="span"/>
 <LazilyRender component={MyComponent}/>
@@ -91,3 +91,9 @@ Called to render something depending on whether the component has been scrolled 
 > `() => void`
 
 Called when the component becomes visible for the first time.
+
+#### eventToUpdate
+
+> `string`
+
+Client event name on which component should update it's visibility properties.
