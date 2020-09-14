@@ -1,5 +1,5 @@
 {
-  "name": "react-lazily-render",
+  "name": "@gemini-testing/react-lazily-render",
   "version": "1.1.0",
   "description": "Lazily render react components",
   "keywords": [
