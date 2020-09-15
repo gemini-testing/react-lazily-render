@@ -18,6 +18,8 @@ export type LazilyRenderProps = {
   children?: (render: boolean) => React.Node;
   onRender?: () => void;
   eventToUpdate?: string;
+  eventToReset?: string;
+  onReset?: () => void;
 };
 
 export type LazilyRenderState = {
@@ -70,9 +72,14 @@ export default class LazilyRender extends React.Component<LazilyRenderProps, Laz
     const container = this.container;
     if (container) container.removeEventListener('scroll', this.update, eventListenerOptions);
     window.removeEventListener('resize', this.update);
-    const {eventToUpdate} = this.props;
+    const {eventToUpdate, eventToReset} = this.props;
+
     if (eventToUpdate) {
         window.removeEventListener(eventToUpdate, this.update);
+    }
+
+    if (eventToReset) {
+      window.removeEventListener(eventToReset, this.reset);
     }
   }
 
@@ -90,6 +97,11 @@ export default class LazilyRender extends React.Component<LazilyRenderProps, Laz
 
       if (isElementInViewport(elementBounds, viewportBounds, offsetBounds)) {
         this.stopListening();
+
+        if (this.props.eventToReset) {
+          window.addEventListener(this.props.eventToReset, this.reset);
+        }
+
         this.setState(
           {
             hasBeenScrolledIntoView: true
@@ -104,6 +116,22 @@ export default class LazilyRender extends React.Component<LazilyRenderProps, Laz
       }
 
     });
+  }
+
+  reset = () => {
+    this.setState(
+      {
+        hasBeenScrolledIntoView: false
+      },
+      () => {
+        const {onReset} = this.props;
+        if (onReset) {
+          onReset();
+        }
+      }
+    );
+    this.startListening();
+    this.update();
   }
 
   handleMount = (element: ?HTMLElement) => {

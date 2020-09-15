@@ -92,8 +92,20 @@ Called to render something depending on whether the component has been scrolled 
 
 Called when the component becomes visible for the first time.
 
+#### onReset
+
+> `() => void`
+
+Called when the visible component reset his state.
+
 #### eventToUpdate
 
 > `string`
 
 Client event name on which component should update it's visibility properties.
+
+#### eventToReset
+
+> `string`
+
+Client event name on which already visible component should reset his current state/listeners and update.
